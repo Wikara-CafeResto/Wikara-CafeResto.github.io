@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="id" class="light scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#fafaf9" id="meta-theme-color">
+    <meta name="description" content="Tentang Wikara - Sundanese Based Oriental Food. Kenali kisah di balik brand dan tim kreatif kami.">
+    
+    <link id="dynamic-favicon" rel="icon" type="image/png" href="../assets/WIKARA_FAVICON-BLACK.png">
+    <title>About - Wikara</title>
+
+    <!-- Critical Theme & Favicon Script (Prevent FOUC) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('color-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+            const html = document.documentElement;
+            const favicon = document.getElementById('dynamic-favicon');
+            const metaTheme = document.getElementById('meta-theme-color');
+
+            if (isDark) {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                if (favicon) favicon.setAttribute('href', '../assets/WIKARA_FAVICON-WHITE.png');
+                if (metaTheme) metaTheme.setAttribute('content', '#0a0a0a');
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                if (favicon) favicon.setAttribute('href', '../assets/WIKARA_FAVICON-BLACK.png');
+                if (metaTheme) metaTheme.setAttribute('content', '#fafaf9');
+            }
+        })();
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                    },
+                    colors: {
+                        wood: '#8b5a2b',
+                        'wood-dark': '#6d4520',
+                        offwhite: '#fafaf9',
+                        dark: '#1c1917',
+                        darker: '#0a0a0a'
+                    },
+                    boxShadow: {
+                        'layer': '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 10px 25px -5px rgba(0, 0, 0, 0.08)',
+                        'layer-dark': '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 10px 25px -5px rgba(0, 0, 0, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Optimized Custom CSS -->
+    <style>
+        html.light #page-transition-overlay { background-color: #fafaf9; }
+        html.dark #page-transition-overlay { background-color: #0a0a0a; }
+        .wikara-spinner {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            border: 4px solid #e4e4e7;
+            border-top-color: #8b5a2b;
+            animation: wikara-spin 0.8s linear infinite;
+        }
+        html.dark .wikara-spinner {
+            border-color: #27272a;
+            border-top-color: #8b5a2b;
+        }
+        @keyframes wikara-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .theme-transition {
+            transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .reveal-hidden {
+            opacity: 0;
+            transform: translate3d(0, 32px, 0);
+            transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-visible {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal-hidden, .theme-transition {
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+        }
+    </style>
+</head>
+<body class="theme-transition bg-offwhite dark:bg-darker text-dark dark:text-zinc-100 font-sans overflow-x-hidden min-h-screen antialiased selection:bg-wood selection:text-white">
+
+    <!-- PAGE TRANSITION OVERLAY -->
+    <div id="page-transition-overlay" class="fixed inset-0 z-[9999] bg-offwhite dark:bg-darker transition-opacity duration-500 ease-in-out flex items-center justify-center opacity-100">
+        <div style="border-top-color: #8b5a2b;" class="w-12 h-12 border-4 border-zinc-200 dark:border-zinc-800 rounded-full animate-spin"></div>
+    </div>
+
+    <!-- OVERLAPPING LAYER 1: Nav Tabs & Section 01 -->
+    <div class="relative w-full max-w-7xl mx-auto px-3 sm:px-8 pt-5 sm:pt-12 z-30">
+        
+        <!-- Header: Tabs + Dark Mode Toggle -->
+        <header class="flex justify-between items-end border-b-0 w-full pr-1 sm:pr-4">
+            
+            <!-- Navigation / Tab Folder -->
+            <nav aria-label="Navigasi Utama" class="relative flex flex-1 min-w-0 items-end overflow-x-visible flex-nowrap no-scrollbar space-x-1 sm:space-x-2 pr-1 sm:pr-4">
+                
+                <a href="../" class="page-link theme-transition relative z-10 px-3 sm:px-8 py-2.5 sm:py-3.5 bg-zinc-200 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:text-dark dark:hover:text-white rounded-t-xl font-medium text-xs sm:text-base cursor-pointer whitespace-nowrap uppercase tracking-wider">
+                    Home
+                </a>
+
+                <!-- ACTIVE TAB: About -->
+                <span aria-current="page" class="theme-transition relative z-30 px-4 sm:px-10 py-2.5 sm:py-4 bg-white dark:bg-[#1c1917] rounded-t-xl sm:rounded-t-2xl font-bold text-dark dark:text-white text-xs sm:text-base cursor-default whitespace-nowrap uppercase tracking-wider select-none
+                            after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:right-0 after:h-[4px] after:bg-white dark:after:bg-[#1c1917]">
+                    About
+                </span>
+                
+                <a href="../food/" class="page-link theme-transition relative z-10 px-3 sm:px-8 py-2.5 sm:py-3.5 bg-zinc-200 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:text-dark dark:hover:text-white rounded-t-xl font-medium text-xs sm:text-base cursor-pointer whitespace-nowrap uppercase tracking-wider">
+                    Food
+                </a>
+
+                <button
+                    id="mobile-menu-button"
+                    type="button"
+                    aria-label="Buka menu navigasi"
+                    aria-expanded="false"
+                    aria-controls="mobile-menu"
+                    class="theme-transition sm:hidden relative z-10 px-3 py-2 bg-zinc-200 dark:bg-zinc-800/80 rounded-t-xl flex items-center justify-center hover:bg-zinc-300 dark:hover:bg-zinc-700 active:scale-95 transition"
+                >                    
+                    <svg class="w-5 h-5 text-zinc-800 dark:text-zinc-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+
+                <a href="../location/" class="page-link theme-transition hidden sm:inline-block relative z-10 px-4 sm:px-8 py-2.5 sm:py-3.5 bg-zinc-200 dark:bg-zinc-800/80 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:text-dark dark:hover:text-white rounded-t-xl font-medium text-sm sm:text-base cursor-pointer whitespace-nowrap uppercase tracking-wider">
+                    Location
+                </a>
+
+                <!-- Mobile Dropdown (Fixed Path to ../location/) -->
+                <div id="mobile-menu" role="menu" class="hidden sm:hidden absolute top-full left-0 mt-2 w-52 bg-white dark:bg-[#1c1917] border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-xl overflow-hidden z-50">
+                    <a href="../location/" role="menuitem" class="page-link block px-5 py-3.5 text-sm font-medium text-dark dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800">Location</a>
+                </div>
+            </nav>
+
+            <button id="theme-toggle" type="button" aria-label="Ubah tema warna" class="theme-transition mb-1 sm:mb-2 ml-2 sm:ml-4 flex-shrink-0 p-2 sm:p-2.5 bg-zinc-200 dark:bg-zinc-800 rounded-full hover:bg-zinc-300 dark:hover:bg-zinc-700 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-wood">
+                <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 sm:w-5 sm:h-5 text-zinc-700" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 sm:w-5 sm:h-5 text-zinc-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path></svg>
+            </button>
+        </header>
+
+        <!-- Section 01: Brand (Top Card) -->
+        <main>
+            <section id="section-01" aria-label="Tentang Brand Wikara" class="theme-transition relative z-30 flex flex-col md:flex-row items-center justify-center min-h-[50vh] p-8 sm:p-16 lg:p-24 bg-white dark:bg-[#1c1917] rounded-[30px] sm:rounded-[40px] rounded-tl-none sm:rounded-tl-none shadow-layer dark:shadow-layer-dark border border-zinc-100 dark:border-zinc-800 overflow-hidden">
+                
+                <div class="flex flex-col md:flex-row items-center w-full max-w-4xl gap-8 sm:gap-12 reveal-hidden">
+                    
+                    <!-- Logo 1:1 (Local Assets Preserved) -->
+                    <div class="flex-shrink-0 w-20 h-20 sm:w-48 sm:h-48">
+                        <img src="../assets/ICON-BLACK.png" alt="Wikara Icon" fetchpriority="high" decoding="async" class="w-full h-full object-contain block dark:hidden">
+                        <img src="../assets/ICON-WHITE.png" alt="Wikara Icon" fetchpriority="high" decoding="async" class="w-full h-full object-contain hidden dark:block">
+                    </div>
+                    
+                    <!-- Brand Info -->
+                    <div class="text-center md:text-left flex flex-col items-center md:items-start w-full">
+                        
+                        <!-- Logo Wordmark (Local Assets Preserved) -->
+                        <div class="w-full max-w-[200px] sm:max-w-[280px] mb-4 mx-auto md:mx-0">
+                            <h1 class="sr-only">Wikara - Sundanese Based Oriental Food</h1>
+                            <img src="../assets/WIKARA-BLACK.png" alt="Wikara Text Logo" fetchpriority="high" decoding="async" class="w-full h-auto object-contain block dark:hidden">
+                            <img src="../assets/WIKARA-WHITE.png" alt="Wikara Text Logo" fetchpriority="high" decoding="async" class="w-full h-auto object-contain hidden dark:block">
+                        </div>
+                        
+                        <div class="w-16 h-1 bg-wood mb-6 mx-auto md:mx-0 rounded-full"></div>
+                        <p class="text-zinc-600 dark:text-zinc-400 text-base sm:text-xl leading-relaxed">
+                            Lahir dari dedikasi mendalam terhadap seni kuliner. Kami percaya bahwa setiap elemen dari alam memiliki cerita, dan melalui Wikara, kami merangkai cerita tersebut menjadi harmoni rasa di atas meja Anda.
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- OVERLAPPING LAYER 2: Section 02 (Owner) -->
+    <div class="relative w-full max-w-7xl mx-auto px-3 sm:px-8 -mt-16 sm:-mt-24 z-20">
+        <section id="section-02" aria-labelledby="owner-badge" class="theme-transition relative bg-zinc-100 dark:bg-darker pt-28 sm:pt-40 pb-20 sm:pb-24 px-6 sm:px-16 rounded-b-[30px] sm:rounded-b-[40px] shadow-layer dark:shadow-layer-dark border border-zinc-200 dark:border-zinc-800 border-t-0">
+            
+            <div id="owner-badge" class="absolute top-24 sm:top-32 left-0 bg-wood text-white px-6 py-2 rounded-r-full font-semibold uppercase tracking-widest text-xs sm:text-sm shadow-md">
+                Owner
+            </div>
+
+            <div class="max-w-4xl mx-auto mt-12 sm:mt-16 flex flex-col gap-16 sm:gap-20">
+                
+                <!-- Card 1: Akira (Left Avatar, Right Text) -->
+                <article class="flex flex-col sm:flex-row items-center gap-6 sm:gap-16 reveal-hidden">
+                    <div class="w-40 h-40 sm:w-56 sm:h-56 rounded-full overflow-hidden flex-shrink-0 border-4 border-white dark:border-zinc-800 shadow-xl bg-zinc-200 dark:bg-zinc-800">
+                        <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&w=400&q=80" alt="Akira - Co-Founder & Head Chef" loading="lazy" decoding="async" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-dark dark:text-white mb-2">Akira</h2>
+                        <p class="text-wood dark:text-[#a67b4f] font-medium tracking-wide uppercase text-xs sm:text-sm mb-4">Founder & Head Chef</p>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-sm sm:text-base leading-relaxed">
+                            Membawa pengalaman lebih dari 15 tahun di dapur bintang Michelin di Tokyo dan Paris. Akira adalah visioner di balik menu inovatif Wikara yang memadukan teknik presisi dengan bahan organik lokal.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Card 2: Ryuki (Right Avatar, Left Text on Desktop / Stacked on Mobile) -->
+                <article class="flex flex-col sm:flex-row-reverse items-center gap-6 sm:gap-16 reveal-hidden">
+                    <div class="w-40 h-40 sm:w-56 sm:h-56 rounded-full overflow-hidden flex-shrink-0 border-4 border-white dark:border-zinc-800 shadow-xl bg-zinc-200 dark:bg-zinc-800">
+                        <img src="https://images.unsplash.com/photo-1583394838336-acd977736f90?auto=format&fit=crop&w=400&q=80" alt="Ryuki - Co-Founder & Sommelier" loading="lazy" decoding="async" class="w-full h-full object-cover">
+                    </div>
+                    <div class="text-center sm:text-right">
+                        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-dark dark:text-white mb-2">Ryuki</h2>
+                        <p class="text-wood dark:text-[#a67b4f] font-medium tracking-wide uppercase text-xs sm:text-sm mb-4">Co-Founder & Sommelier</p>
+                        <p class="text-zinc-500 dark:text-zinc-400 text-sm sm:text-base leading-relaxed">
+                            Pakar kurasi anggur yang memastikan setiap tegukan melengkapi simfoni rasa hidangan kami. Ryuki merancang suasana dan pelayanan untuk memberikan standar keramahtamahan tertinggi.
+                        </p>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- OVERLAPPING LAYER 3: Section 03 (Director) -->
+    <div class="relative w-full max-w-7xl mx-auto px-3 sm:px-8 -mt-16 sm:-mt-20 z-10 mb-20">
+        <section id="section-03" aria-labelledby="director-badge" class="theme-transition relative bg-white dark:bg-[#1c1917] pt-28 sm:pt-36 pb-20 sm:pb-24 px-6 sm:px-16 rounded-b-[30px] sm:rounded-b-[40px] shadow-layer dark:shadow-layer-dark border border-zinc-200 dark:border-zinc-800 border-t-0">
+            
+            <div id="director-badge" class="absolute top-20 sm:top-28 left-0 bg-zinc-800 dark:bg-zinc-700 text-white px-6 py-2 rounded-r-full font-semibold uppercase tracking-widest text-xs sm:text-sm shadow-md">
+                Director
+            </div>
+
+            <div class="max-w-4xl mx-auto mt-12 sm:mt-16 flex flex-col gap-16 sm:gap-20">
+                
+                <!-- Card 3: Rara (Left Avatar, Right Text) -->
+                <article class="flex flex-col sm:flex-row items-center gap-6 sm:gap-16 reveal-hidden">
+                    <div class="w-40 h-40 sm:w-56 sm:h-56 rounded-full overflow-hidden flex-shrink-0 border-4 border-zinc-100 dark:border-zinc-800 shadow-xl bg-zinc-200 dark:bg-zinc-800">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80" alt="Rara - Chief Operating Officer" loading="lazy" decoding="async" class="w-full h-full object-cover object-top">
+                    </div>
+                    <div class="text-center sm:text-left">
+                        <h2 class="font-serif text-3xl sm:text-4xl font-bold text-dark dark:text-white mb-2">Rara</h2>
+                        <p class="text-zinc-500 dark:text-zinc-400 font-medium tracking-wide uppercase text-xs sm:text-sm mb-4">Chief Operating Officer</p>
+                        <p class="text-zinc-600 dark:text-zinc-300 text-sm sm:text-base leading-relaxed">
+                            Mengatur setiap detak operasional restoran dari layar balik. Dengan latar belakang manajemen perhotelan global, Rara memastikan sistem berjalan tanpa cela agar chef dan sommelier dapat fokus menciptakan karya seni mereka.
+                        </p>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- Simple Footer -->
+    <footer class="bg-darker border-t border-zinc-900 text-zinc-500 py-10 text-center text-sm">
+        <p>© 2026 Wikara Web Development. <br> Website By Vexa WebStudio</p>
+    </footer>
+
+    <!-- Optimized Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const htmlElement = document.documentElement;
+            const favicon = document.getElementById('dynamic-favicon');
+            const metaTheme = document.getElementById('meta-theme-color');
+            const overlay = document.getElementById('page-transition-overlay');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            /* --- 1. THEME SYNC & FAVICON --- */
+            const syncThemeUI = () => {
+                const isDark = htmlElement.classList.contains('dark');
+                if (isDark) {
+                    lightIcon.classList.remove('hidden');
+                    darkIcon.classList.add('hidden');
+                    if (favicon) favicon.setAttribute('href', '../assets/WIKARA_FAVICON-WHITE.png');
+                    if (metaTheme) metaTheme.setAttribute('content', '#0a0a0a');
+                } else {
+                    darkIcon.classList.remove('hidden');
+                    lightIcon.classList.add('hidden');
+                    if (favicon) favicon.setAttribute('href', '../assets/WIKARA_FAVICON-BLACK.png');
+                    if (metaTheme) metaTheme.setAttribute('content', '#fafaf9');
+                }
+            };
+
+            syncThemeUI();
+
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = htmlElement.classList.contains('dark');
+                htmlElement.classList.toggle('dark', !isDark);
+                htmlElement.classList.toggle('light', isDark);
+                localStorage.setItem('color-theme', isDark ? 'light' : 'dark');
+                syncThemeUI();
+            });
+
+            // /* --- 2. SMOOTH PAGE TRANSITION + BFCACHE FIX --- */
+            const hideLoadingOverlay = () => {
+                if (!overlay) return;
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-100');
+                    overlay.classList.add('opacity-0');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                    }, 500);
+                }, 100);
+            };
+
+            hideLoadingOverlay();
+
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted) hideLoadingOverlay();
+            });
+
+            document.querySelectorAll('.page-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetUrl = this.getAttribute('href');
+                    if (!targetUrl || targetUrl.startsWith('#') || e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+
+                    e.preventDefault();
+                    if (overlay) {
+                        overlay.classList.remove('hidden');
+                        setTimeout(() => {
+                            overlay.classList.remove('opacity-0');
+                            overlay.classList.add('opacity-100');
+                            setTimeout(() => {
+                                window.location.href = targetUrl;
+                            }, 500);
+                        }, 10);
+                    } else {
+                        window.location.href = targetUrl;
+                    }
+                });
+            });
+
+            /* --- 3. SCROLL REVEAL --- */
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-visible');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
+
+            document.querySelectorAll('.reveal-hidden').forEach(el => observer.observe(el));
+
+            /* --- 4. MOBILE MENU --- */
+            const closeMobileMenu = () => {
+                mobileMenu.classList.add('hidden');
+                menuButton.setAttribute('aria-expanded', 'false');
+            };
+
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isHidden = mobileMenu.classList.toggle('hidden');
+                menuButton.setAttribute('aria-expanded', String(!isHidden));
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) closeMobileMenu();
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMobileMenu();
+            });
+        });
+    </script>
+</body>
+</html>

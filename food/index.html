@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="id" class="light scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#fafaf9" id="meta-theme-color">
+    <meta name="description" content="Daftar Menu Wikara - Sundanese Based Oriental Food. Jelajahi berbagai pilihan hidangan spesial beserta detail dan tambahannya.">
+    
+    <link id="dynamic-favicon" rel="icon" type="image/png" href="../assets/WIKARA_FAVICON-BLACK.png">
+    <title>Menu - Wikara</title>
+
+    <!-- Critical Theme & Favicon Script (Prevent FOUC) -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('color-theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const isDark = savedTheme === 'dark' || (!savedTheme && prefersDark);
+            const html = document.documentElement;
+            const favicon = document.getElementById('dynamic-favicon');
+            const metaTheme = document.getElementById('meta-theme-color');
+
+            if (isDark) {
+                html.classList.remove('light');
+                html.classList.add('dark');
+                if (favicon) favicon.setAttribute('href', '../assets/WIKARA_FAVICON-WHITE.png');
+                if (metaTheme) metaTheme.setAttribute('content', '#0a0a0a');
+            } else {
+                html.classList.remove('dark');
+                html.classList.add('light');
+                if (favicon) favicon.setAttribute('href', '../assets/WIKARA_FAVICON-BLACK.png');
+                if (metaTheme) metaTheme.setAttribute('content', '#fafaf9');
+            }
+        })();
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                    },
+                    colors: {
+                        wood: '#8b5a2b',
+                        'wood-dark': '#6d4520',
+                        offwhite: '#fafaf9',
+                        dark: '#1c1917',
+                        darker: '#0a0a0a'
+                    },
+                    boxShadow: {
+                        'layer': '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 10px 25px -5px rgba(0, 0, 0, 0.08)',
+                        'layer-dark': '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 10px 25px -5px rgba(0, 0, 0, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Optimized Custom CSS -->
+    <style>
+        html.light #page-transition-overlay { background-color: #fafaf9; }
+        html.dark #page-transition-overlay { background-color: #0a0a0a; }
+        .wikara-spinner {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 9999px;
+            border: 4px solid #e4e4e7;
+            border-top-color: #8b5a2b;
+            animation: wikara-spin 0.8s linear infinite;
+        }
+        html.dark .wikara-spinner {
+            border-color: #27272a;
+            border-top-color: #8b5a2b;
+        }
+        @keyframes wikara-spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .theme-transition {
+            transition: background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .reveal-hidden {
+            opacity: 0;
+            transform: translate3d(0, 32px, 0);
+            transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+        .reveal-visible {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+
+        /* Modal Transitions (Bottom Sheet on Mobile, Centered Card on Desktop) */
+        .overlay-backdrop {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .overlay-backdrop.modal-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .overlay-backdrop.modal-visible {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+        
+        .modal-content {
+            transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(100%);
+        }
+        @media (min-width: 640px) {
+            .modal-content {
+                transform: translateY(32px) scale(0.96);
+            }
+        }
+        .overlay-backdrop.modal-visible .modal-content {
+            transform: translateY(0) scale(1);
+        }
+
+        /* Accordion transition */
+        .category-content {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .category-content.expanded {
+            grid-template-rows: 1fr;
+        }
+        .category-content > div {
+            overflow: hidden;
+        }
+        .category-icon {
+            transition: transform 0.3s ease;
+        }
+        .expanded-icon {
+            transform: rotate(180deg);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .reveal-hidden, .theme-transition, .overlay-backdrop, .modal-content, .category-content, .category-icon {
+                transition: none !important;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+        }
+    </style>
+</head>
+<body class="theme-transition bg-offwhite dark:bg-darker text-dark dark:text-zinc-100 font-sans overflow-x-hidden min-h-screen antialiased selection:bg-wood selection:text-white">
+
+    <!-- PAGE TRANSITION OVERLAY -->
+    <div id="page-transition-overlay" class="fixed inset-0 z-[9999] bg-offwhite dark:bg-darker transition-opacity duration-500 ease-in-out flex items-center justify-center opacity-100">
+        <div style="border-top-color: #8b5a2b;" class="w-12 h-12 border-4 border-zinc-200 dark:border-zinc-800 rounded-full animate-spin"></div>
+    </div>
+
+    <!-- OVERLAPPING LAYER 1: Nav Tabs & Section 01 (Best Seller) -->
+    <div class="relative w-full max-w-7xl mx-auto px-3 sm:px-8 pt-5 sm:pt-12 z-30">
+        
+        <!-- Header: Tabs + Dark Mode Toggle -->
+        <header class="flex justify-between items-end border-b-0 w-full pr-1 sm:pr-4">
+            
+            <nav aria-label="Navigasi Utama" class="relative flex flex-1 min-w-0 items-end overflow-x-visible flex-nowrap no-scrollbar space-x-1 sm:space-x-2 pr-1 sm:pr-4">
+                <a href="../" class="page-link theme-transition relative z-10 px-3 sm:px-8 py-2.5 sm:py-3.5 bg-zinc-200 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:text-dark dark:hover:text-white rounded-t-xl font-medium text-xs sm:text-base cursor-pointer whitespace-nowrap uppercase tracking-wider">
+                    Home
+                </a>
+                
+                <a href="../about/" class="page-link theme-transition hidden sm:inline-block relative z-10 px-4 sm:px-8 py-2.5 sm:py-3.5 bg-zinc-200 dark:bg-zinc-800/80 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:text-dark dark:hover:text-white rounded-t-xl font-medium text-sm sm:text-base cursor-pointer whitespace-nowrap uppercase tracking-wider">
+                    About
+                </a>
+
+                <!-- ACTIVE TAB: Food -->
+                <span aria-current="page" class="theme-transition relative z-30 px-4 sm:px-10 py-2.5 sm:py-4 bg-white dark:bg-[#1c1917] rounded-t-xl sm:rounded-t-2xl font-bold text-dark dark:text-white text-xs sm:text-base cursor-default whitespace-nowrap uppercase tracking-wider select-none
+                            after:content-[''] after:absolute after:-bottom-[2px] after:left-0 after:right-0 after:h-[4px] after:bg-white dark:after:bg-[#1c1917]">
+                    Food
+                </span>
+
+                <button id="mobile-menu-button" type="button" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="mobile-menu" class="theme-transition sm:hidden relative z-10 px-3 py-2 bg-zinc-200 dark:bg-zinc-800/80 rounded-t-xl flex items-center justify-center hover:bg-zinc-300 dark:hover:bg-zinc-700 active:scale-95 transition">                    
+                    <svg class="w-5 h-5 text-zinc-800 dark:text-zinc-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+
+                <a href="../location/" class="page-link theme-transition hidden sm:inline-block relative z-10 px-4 sm:px-8 py-2.5 sm:py-3.5 bg-zinc-200 dark:bg-zinc-800/80 text-zinc-500 dark:text-zinc-400 hover:bg-zinc-300 dark:hover:bg-zinc-700 hover:text-dark dark:hover:text-white rounded-t-xl font-medium text-sm sm:text-base cursor-pointer whitespace-nowrap uppercase tracking-wider">
+                    Location
+                </a>
+                
+                <!-- Mobile Dropdown -->
+                <div id="mobile-menu" role="menu" class="hidden sm:hidden absolute top-full left-0 mt-2 w-52 bg-white dark:bg-[#1c1917] border border-zinc-200 dark:border-zinc-700 rounded-2xl shadow-xl overflow-hidden z-50">
+                    <a href="../about/" role="menuitem" class="page-link block px-5 py-3.5 text-sm font-medium text-dark dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 border-b border-zinc-100 dark:border-zinc-800">About</a>
+                    <a href="../location/" role="menuitem" class="page-link block px-5 py-3.5 text-sm font-medium text-dark dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800">Location</a>
+                </div>
+            </nav>
+
+            <button id="theme-toggle" type="button" aria-label="Ubah tema warna" class="theme-transition mb-1 sm:mb-2 ml-2 sm:ml-4 flex-shrink-0 p-2 sm:p-2.5 bg-zinc-200 dark:bg-zinc-800 rounded-full hover:bg-zinc-300 dark:hover:bg-zinc-700 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-wood">
+                <svg id="theme-toggle-dark-icon" class="hidden w-4 h-4 sm:w-5 sm:h-5 text-zinc-700" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                <svg id="theme-toggle-light-icon" class="hidden w-4 h-4 sm:w-5 sm:h-5 text-zinc-300" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path></svg>
+            </button>
+        </header>
+
+        <!-- Section 01: Best Seller -->
+        <main>
+            <section id="section-01" aria-labelledby="bestseller-heading" class="theme-transition relative z-30 pt-12 pb-16 px-4 sm:px-12 bg-white dark:bg-[#1c1917] rounded-[30px] sm:rounded-[40px] rounded-tl-none sm:rounded-tl-none shadow-layer dark:shadow-layer-dark border border-zinc-100 dark:border-zinc-800 overflow-hidden">
+                
+                <!-- CARD WATERMARK LOGO (Kontras dengan Tema, Aset Lokal Dipertahankan) -->
+                <div class="theme-transition absolute top-0 right-0 bg-darker dark:bg-zinc-50 border-b border-l border-zinc-800 dark:border-zinc-200 rounded-bl-[30px] shadow-lg p-3 sm:p-5 z-20 flex items-center justify-center transition-transform hover:scale-105">
+                    <img src="../assets/WIKARA_WATERMARK-WHITE.png" alt="Wikara Logo" fetchpriority="high" decoding="async" class="w-16 h-16 sm:w-20 sm:h-20 object-contain block dark:hidden">
+                    <img src="../assets/WIKARA_WATERMARK-BLACK.png" alt="Wikara Logo" fetchpriority="high" decoding="async" class="w-16 h-16 sm:w-20 sm:h-20 object-contain hidden dark:block">
+                </div>
+
+                <div class="relative z-10 text-center mb-10 sm:mb-12 reveal-hidden mt-6 sm:mt-0">
+                    <h1 id="bestseller-heading" class="font-serif text-3xl sm:text-5xl font-bold">Best Seller</h1>
+                    <div class="w-16 h-1 bg-wood mx-auto mt-4 sm:mt-6 rounded-full"></div>
+                </div>
+
+                <!-- Best Seller Grid (3 Columns) -->
+                <div class="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-10">
+                    <!-- Card 1 -->
+                    <article role="button" tabindex="0" class="menu-item-trigger menu-card theme-transition group cursor-pointer bg-zinc-50 dark:bg-darker rounded-2xl overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800 hover:border-wood/60 reveal-hidden flex flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-wood"
+                             data-name="Dry Aged Ribeye"
+                             data-price="Rp 450.000"
+                             data-desc="Steak daging sapi premium yang melalui proses dry-aging 30 hari, disajikan dengan truffle mash."
+                             data-img="https://images.unsplash.com/photo-1544025162-8311029c7b64?auto=format&fit=crop&w=800&q=80"
+                             data-addons='[{"name":"Regular Rice","price":"Gratis"},{"name":"Medium Rice","price":"+ Rp 5.000"},{"name":"Sunny Side Egg","price":"+ Rp 5.000"},{"name":"Extra Sambal","price":"+ Rp 3.000"}]'>
+                        <div class="h-48 sm:h-64 w-full overflow-hidden relative bg-zinc-200 dark:bg-zinc-800">
+                            <img src="https://images.unsplash.com/photo-1544025162-8311029c7b64?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Dry Aged Ribeye" fetchpriority="high" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow text-center">
+                            <h2 class="font-serif text-xl font-bold mb-2 group-hover:text-wood dark:group-hover:text-[#a67b4f] transition-colors">Dry Aged Ribeye</h2>
+                            <p class="text-wood font-semibold mb-4">Rp 450.000</p>
+                            <span class="theme-transition mt-auto w-full py-2.5 border-2 border-wood text-wood dark:text-[#a67b4f] dark:border-[#a67b4f] font-medium rounded-xl group-hover:bg-wood group-hover:text-white dark:group-hover:bg-[#a67b4f] dark:group-hover:text-white">
+                                Detail Menu
+                            </span>
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article role="button" tabindex="0" class="menu-item-trigger menu-card theme-transition group cursor-pointer bg-zinc-50 dark:bg-darker rounded-2xl overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800 hover:border-wood/60 reveal-hidden flex flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-wood"
+                             data-name="Seared Scallops"
+                             data-price="Rp 320.000"
+                             data-desc="Kerang laut segar panggang dengan puree kembang kol dan cipratan lemon butter sauce."
+                             data-img="https://images.unsplash.com/photo-1414235077428-338988a2e8c0?auto=format&fit=crop&w=800&q=80"
+                             data-addons='[{"name":"Regular Rice","price":"Gratis"},{"name":"Medium Rice","price":"+ Rp 5.000"},{"name":"Sunny Side Egg","price":"+ Rp 5.000"},{"name":"Extra Sambal","price":"+ Rp 3.000"}]'>
+                        <div class="h-48 sm:h-64 w-full overflow-hidden relative bg-zinc-200 dark:bg-zinc-800">
+                            <img src="https://images.unsplash.com/photo-1414235077428-338988a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Seared Scallops" fetchpriority="high" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow text-center">
+                            <h2 class="font-serif text-xl font-bold mb-2 group-hover:text-wood dark:group-hover:text-[#a67b4f] transition-colors">Seared Scallops</h2>
+                            <p class="text-wood font-semibold mb-4">Rp 320.000</p>
+                            <span class="theme-transition mt-auto w-full py-2.5 border-2 border-wood text-wood dark:text-[#a67b4f] dark:border-[#a67b4f] font-medium rounded-xl group-hover:bg-wood group-hover:text-white dark:group-hover:bg-[#a67b4f] dark:group-hover:text-white">
+                                Detail Menu
+                            </span>
+                        </div>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article role="button" tabindex="0" class="menu-item-trigger menu-card theme-transition group cursor-pointer bg-zinc-50 dark:bg-darker rounded-2xl overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800 hover:border-wood/60 reveal-hidden flex flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-wood"
+                             data-name="Truffle Pasta"
+                             data-price="Rp 280.000"
+                             data-desc="Pasta buatan tangan dengan aneka jamur liar, krim parmesan, dan minyak truffle hitam aromatik."
+                             data-img="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80"
+                             data-addons='[{"name":"Regular Rice","price":"Gratis"},{"name":"Medium Rice","price":"+ Rp 5.000"},{"name":"Sunny Side Egg","price":"+ Rp 5.000"},{"name":"Extra Sambal","price":"+ Rp 3.000"}]'>
+                        <div class="h-48 sm:h-64 w-full overflow-hidden relative bg-zinc-200 dark:bg-zinc-800">
+                            <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Truffle Pasta" fetchpriority="high" decoding="async" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                        <div class="p-5 flex flex-col flex-grow text-center">
+                            <h2 class="font-serif text-xl font-bold mb-2 group-hover:text-wood dark:group-hover:text-[#a67b4f] transition-colors">Truffle Pasta</h2>
+                            <p class="text-wood font-semibold mb-4">Rp 280.000</p>
+                            <span class="theme-transition mt-auto w-full py-2.5 border-2 border-wood text-wood dark:text-[#a67b4f] dark:border-[#a67b4f] font-medium rounded-xl group-hover:bg-wood group-hover:text-white dark:group-hover:bg-[#a67b4f] dark:group-hover:text-white">
+                                Detail Menu
+                            </span>
+                        </div>
+                    </article>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- OVERLAPPING LAYER 2: Section 02 (Categories / Expandable) -->
+    <div class="relative w-full max-w-7xl mx-auto px-3 sm:px-8 -mt-16 sm:-mt-24 z-20 mb-20">
+        <section id="section-02" aria-label="Kategori Menu" class="theme-transition relative bg-zinc-100 dark:bg-darker pt-28 sm:pt-40 pb-20 sm:pb-24 px-4 sm:px-12 rounded-b-[30px] sm:rounded-b-[40px] shadow-layer dark:shadow-layer-dark border border-zinc-200 dark:border-zinc-800 border-t-0">
+            
+            <!-- Category 1: Dimsum -->
+            <div class="mb-10 reveal-hidden">
+                <button type="button" aria-expanded="true" class="accordion-btn theme-transition w-full flex justify-between items-center bg-white dark:bg-[#1c1917] px-6 py-4 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-wood hover:border-wood">
+                    <span class="font-serif text-xl sm:text-2xl font-bold">Dimsum</span>
+                    <svg class="category-icon expanded-icon w-6 h-6 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div class="category-content expanded">
+                    <div class="pt-6">
+                        <!-- Dimsum Grid (4 Columns Desktop, 2 Mobile) -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                            <!-- Small Card 1 -->
+                            <article role="button" tabindex="0" class="menu-item-trigger theme-transition cursor-pointer bg-white dark:bg-[#1c1917] rounded-xl overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800 hover:border-wood/60 flex flex-col group focus:outline-none focus-visible:ring-2 focus-visible:ring-wood"
+                                     data-name="Hakau Udang"
+                                     data-price="Rp 45.000"
+                                     data-desc="Dimsum kukus klasik dengan kulit transparan lembut berisi udang segar pilihan."
+                                     data-img="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?auto=format&fit=crop&w=400&q=80"
+                                     data-addons='[{"name":"Regular Rice","price":"Gratis"},{"name":"Medium Rice","price":"+ Rp 5.000"},{"name":"Sunny Side Egg","price":"+ Rp 5.000"},{"name":"Extra Sambal","price":"+ Rp 3.000"}]'>
+                                <div class="h-32 sm:h-40 w-full overflow-hidden relative bg-zinc-200 dark:bg-zinc-800">
+                                    <img src="https://images.unsplash.com/photo-1496116218417-1a781b1c416c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Hakau Udang" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-3 text-center flex flex-col flex-grow">
+                                    <h3 class="font-serif font-bold text-sm sm:text-base truncate group-hover:text-wood dark:group-hover:text-[#a67b4f] transition-colors">Hakau Udang</h3>
+                                    <p class="text-wood text-xs sm:text-sm mb-3">Rp 45.000</p>
+                                    <span class="theme-transition mt-auto text-xs py-1.5 border border-wood text-wood dark:border-[#a67b4f] dark:text-[#a67b4f] rounded-lg group-hover:bg-wood group-hover:text-white">Detail Menu</span>
+                                </div>
+                            </article>
+
+                            <!-- Small Card 2 -->
+                            <article role="button" tabindex="0" class="menu-item-trigger theme-transition cursor-pointer bg-white dark:bg-[#1c1917] rounded-xl overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800 hover:border-wood/60 flex flex-col group focus:outline-none focus-visible:ring-2 focus-visible:ring-wood"
+                                     data-name="Siomay Ayam"
+                                     data-price="Rp 40.000"
+                                     data-desc="Siomay kukus gurih berbahan daging ayam cincang dan udang dengan topping tobiko."
+                                     data-img="https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=400&q=80"
+                                     data-addons='[{"name":"Regular Rice","price":"Gratis"},{"name":"Medium Rice","price":"+ Rp 5.000"},{"name":"Sunny Side Egg","price":"+ Rp 5.000"},{"name":"Extra Sambal","price":"+ Rp 3.000"}]'>
+                                <div class="h-32 sm:h-40 w-full overflow-hidden relative bg-zinc-200 dark:bg-zinc-800">
+                                    <img src="https://images.unsplash.com/photo-1512058564366-18510be2db19?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Siomay Ayam" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-3 text-center flex flex-col flex-grow">
+                                    <h3 class="font-serif font-bold text-sm sm:text-base truncate group-hover:text-wood dark:group-hover:text-[#a67b4f] transition-colors">Siomay Ayam</h3>
+                                    <p class="text-wood text-xs sm:text-sm mb-3">Rp 40.000</p>
+                                    <span class="theme-transition mt-auto text-xs py-1.5 border border-wood text-wood dark:border-[#a67b4f] dark:text-[#a67b4f] rounded-lg group-hover:bg-wood group-hover:text-white">Detail Menu</span>
+                                </div>
+                            </article>
+
+                            <!-- Small Card 3 -->
+                            <article role="button" tabindex="0" class="menu-item-trigger theme-transition cursor-pointer bg-white dark:bg-[#1c1917] rounded-xl overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800 hover:border-wood/60 flex flex-col group focus:outline-none focus-visible:ring-2 focus-visible:ring-wood"
+                                     data-name="Xiao Long Bao"
+                                     data-price="Rp 55.000"
+                                     data-desc="Pangsit kukus hangat berisi kaldu ayam gurih yang kaya rasa di setiap gigitan."
+                                     data-img="https://images.unsplash.com/photo-1585032226651-759b368d7246?auto=format&fit=crop&w=400&q=80"
+                                     data-addons='[{"name":"Regular Rice","price":"Gratis"},{"name":"Medium Rice","price":"+ Rp 5.000"},{"name":"Sunny Side Egg","price":"+ Rp 5.000"},{"name":"Extra Sambal","price":"+ Rp 3.000"}]'>
+                                <div class="h-32 sm:h-40 w-full overflow-hidden relative bg-zinc-200 dark:bg-zinc-800">
+                                    <img src="https://images.unsplash.com/photo-1585032226651-759b368d7246?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Xiao Long Bao" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-3 text-center flex flex-col flex-grow">
+                                    <h3 class="font-serif font-bold text-sm sm:text-base truncate group-hover:text-wood dark:group-hover:text-[#a67b4f] transition-colors">Xiao Long Bao</h3>
+                                    <p class="text-wood text-xs sm:text-sm mb-3">Rp 55.000</p>
+                                    <span class="theme-transition mt-auto text-xs py-1.5 border border-wood text-wood dark:border-[#a67b4f] dark:text-[#a67b4f] rounded-lg group-hover:bg-wood group-hover:text-white">Detail Menu</span>
+                                </div>
+                            </article>
+
+                            <!-- Small Card 4 -->
+                            <article role="button" tabindex="0" class="menu-item-trigger theme-transition cursor-pointer bg-white dark:bg-[#1c1917] rounded-xl overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800 hover:border-wood/60 flex flex-col group focus:outline-none focus-visible:ring-2 focus-visible:ring-wood"
+                                     data-name="Lumpia Kulit Tahu"
+                                     data-price="Rp 48.000"
+                                     data-desc="Kulit tahu renyah membalut isian udang dan ayam berbumbu oriental."
+                                     data-img="https://images.unsplash.com/photo-1628198755601-52646274431e?auto=format&fit=crop&w=400&q=80"
+                                     data-addons='[{"name":"Regular Rice","price":"Gratis"},{"name":"Medium Rice","price":"+ Rp 5.000"},{"name":"Sunny Side Egg","price":"+ Rp 5.000"},{"name":"Extra Sambal","price":"+ Rp 3.000"}]'>
+                                <div class="h-32 sm:h-40 w-full overflow-hidden relative bg-zinc-200 dark:bg-zinc-800">
+                                    <img src="https://images.unsplash.com/photo-1628198755601-52646274431e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Lumpia Kulit Tahu" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-3 text-center flex flex-col flex-grow">
+                                    <h3 class="font-serif font-bold text-sm sm:text-base truncate group-hover:text-wood dark:group-hover:text-[#a67b4f] transition-colors">Lumpia Kulit Tahu</h3>
+                                    <p class="text-wood text-xs sm:text-sm mb-3">Rp 48.000</p>
+                                    <span class="theme-transition mt-auto text-xs py-1.5 border border-wood text-wood dark:border-[#a67b4f] dark:text-[#a67b4f] rounded-lg group-hover:bg-wood group-hover:text-white">Detail Menu</span>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category 2: Drinks -->
+            <div class="mb-6 reveal-hidden">
+                <button type="button" aria-expanded="false" class="accordion-btn theme-transition w-full flex justify-between items-center bg-white dark:bg-[#1c1917] px-6 py-4 rounded-2xl shadow-sm border border-zinc-200 dark:border-zinc-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-wood hover:border-wood">
+                    <span class="font-serif text-xl sm:text-2xl font-bold">Drinks</span>
+                    <svg class="category-icon w-6 h-6 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+                
+                <div class="category-content">
+                    <div class="pt-6">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+                            <!-- Small Card -->
+                            <article role="button" tabindex="0" class="menu-item-trigger theme-transition cursor-pointer bg-white dark:bg-[#1c1917] rounded-xl overflow-hidden shadow-sm border border-zinc-100 dark:border-zinc-800 hover:border-wood/60 flex flex-col group focus:outline-none focus-visible:ring-2 focus-visible:ring-wood"
+                                     data-name="Lychee Iced Tea"
+                                     data-price="Rp 35.000"
+                                     data-desc="Seduhan teh melati premium dingin dengan buah leci segar dan sirup alami."
+                                     data-img="https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=400&q=80"
+                                     data-addons='[{"name":"Less Ice","price":"Gratis"},{"name":"Extra Lychee","price":"+ Rp 6.000"},{"name":"Chia Seeds","price":"+ Rp 4.000"}]'>
+                                <div class="h-32 sm:h-40 w-full overflow-hidden relative bg-zinc-200 dark:bg-zinc-800">
+                                    <img src="https://images.unsplash.com/photo-1556679343-c7306c1976bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Lychee Iced Tea" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                </div>
+                                <div class="p-3 text-center flex flex-col flex-grow">
+                                    <h3 class="font-serif font-bold text-sm sm:text-base truncate group-hover:text-wood dark:group-hover:text-[#a67b4f] transition-colors">Lychee Iced Tea</h3>
+                                    <p class="text-wood text-xs sm:text-sm mb-3">Rp 35.000</p>
+                                    <span class="theme-transition mt-auto text-xs py-1.5 border border-wood text-wood dark:border-[#a67b4f] dark:text-[#a67b4f] rounded-lg group-hover:bg-wood group-hover:text-white">Detail Menu</span>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+
+    <!-- POPUP UI MODAL (MENU DETAIL & ADD-ONS INFO ONLY) -->
+    <div id="menu-detail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" class="overlay-backdrop modal-hidden fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4">
+        <div class="modal-content theme-transition bg-white dark:bg-[#1c1917] w-full max-w-2xl rounded-t-3xl sm:rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[92vh] sm:max-h-[90vh]">
+            
+            <!-- Mobile Drag Handle Indicator -->
+            <div class="sm:hidden w-full flex justify-center pt-2.5 pb-1 bg-zinc-50 dark:bg-darker">
+                <div class="w-10 h-1 rounded-full bg-zinc-300 dark:bg-zinc-700"></div>
+            </div>
+
+            <!-- Header (Back Button) -->
+            <div class="px-6 py-3.5 sm:py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between bg-zinc-50 dark:bg-darker">
+                <button id="close-modal" type="button" class="flex items-center gap-2 text-zinc-600 dark:text-zinc-300 hover:text-wood font-medium focus:outline-none transition-colors py-1">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    Kembali
+                </button>
+                <span class="text-xs uppercase tracking-widest text-zinc-400 font-semibold">Detail Menu</span>
+            </div>
+
+            <!-- Body (Scrollable) -->
+            <div class="p-5 sm:p-6 overflow-y-auto no-scrollbar">
+                
+                <!-- Food Info -->
+                <div class="flex flex-col sm:flex-row gap-5 sm:gap-6 mb-6 sm:mb-8">
+                    <div class="w-full sm:w-2/5 h-48 sm:h-auto rounded-2xl overflow-hidden flex-shrink-0 bg-zinc-200 dark:bg-zinc-800">
+                        <img id="modal-img" src="" alt="Food preview" class="w-full h-full object-cover">
+                    </div>
+                    <div class="flex flex-col justify-center">
+                        <h2 id="modal-title" class="font-serif text-2xl sm:text-3xl font-bold mb-1.5">Food Name</h2>
+                        <p id="modal-price" class="text-wood dark:text-[#a67b4f] font-semibold text-lg sm:text-xl mb-3">Rp 0</p>
+                        <p id="modal-desc" class="text-zinc-500 dark:text-zinc-400 text-sm leading-relaxed">
+                            Hidangan spesial dari koki kami, dimasak dengan bahan pilihan dan bumbu otentik untuk memberikan pengalaman rasa terbaik.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Add-ons Price List (Read-Only Info, Tanpa Ceklis) -->
+                <div id="modal-addons-section" class="theme-transition bg-zinc-50 dark:bg-darker rounded-2xl p-4 sm:p-5 border border-zinc-100 dark:border-zinc-800">
+                    <div class="flex items-center justify-between mb-3.5">
+                        <span class="font-semibold text-dark dark:text-white text-sm sm:text-base">Pilihan Tambahan (Add-ons)</span>
+                        <span class="text-xs text-zinc-400">Opsional</span>
+                    </div>
+                    
+                    <!-- 2 Column Info List -->
+                    <div id="modal-addons-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3">
+                        <!-- Diisi otomatis sesuai menu yang diklik -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Simple Footer -->
+    <footer class="bg-darker border-t border-zinc-900 text-zinc-500 py-10 text-center text-sm">
+        <p>© 2026 Wikara Web Development. <br> Website By Vexa WebStudio</p>
+    </footer>
+
+    <!-- Optimized Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const htmlElement = document.documentElement;
+            const favicon = document.getElementById('dynamic-favicon');
+            const metaTheme = document.getElementById('meta-theme-color');
+            const overlay = document.getElementById('page-transition-overlay');
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const darkIcon = document.getElementById('theme-toggle-dark-icon');
+            const lightIcon = document.getElementById('theme-toggle-light-icon');
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            /* --- 1. THEME SYNC & FAVICON --- */
+            const syncThemeUI = () => {
+                const isDark = htmlElement.classList.contains('dark');
+                if (isDark) {
+                    lightIcon.classList.remove('hidden');
+                    darkIcon.classList.add('hidden');
+                    if (favicon) favicon.setAttribute('href', '../assets/WIKARA_FAVICON-WHITE.png');
+                    if (metaTheme) metaTheme.setAttribute('content', '#0a0a0a');
+                } else {
+                    darkIcon.classList.remove('hidden');
+                    lightIcon.classList.add('hidden');
+                    if (favicon) favicon.setAttribute('href', '../assets/WIKARA_FAVICON-BLACK.png');
+                    if (metaTheme) metaTheme.setAttribute('content', '#fafaf9');
+                }
+            };
+
+            syncThemeUI();
+
+            themeToggleBtn.addEventListener('click', () => {
+                const isDark = htmlElement.classList.contains('dark');
+                htmlElement.classList.toggle('dark', !isDark);
+                htmlElement.classList.toggle('light', isDark);
+                localStorage.setItem('color-theme', isDark ? 'light' : 'dark');
+                syncThemeUI();
+            });
+
+            // /* --- 2. SMOOTH PAGE TRANSITION + BFCACHE FIX --- */
+            const hideLoadingOverlay = () => {
+                if (!overlay) return;
+                setTimeout(() => {
+                    overlay.classList.remove('opacity-100');
+                    overlay.classList.add('opacity-0');
+                    setTimeout(() => {
+                        overlay.classList.add('hidden');
+                    }, 500);
+                }, 100);
+            };
+
+            hideLoadingOverlay();
+
+            window.addEventListener('pageshow', (event) => {
+                if (event.persisted) hideLoadingOverlay();
+            });
+
+            document.querySelectorAll('.page-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    const targetUrl = this.getAttribute('href');
+                    if (!targetUrl || targetUrl.startsWith('#') || e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+
+                    e.preventDefault();
+                    if (overlay) {
+                        overlay.classList.remove('hidden');
+                        setTimeout(() => {
+                            overlay.classList.remove('opacity-0');
+                            overlay.classList.add('opacity-100');
+                            setTimeout(() => {
+                                window.location.href = targetUrl;
+                            }, 500);
+                        }, 10);
+                    } else {
+                        window.location.href = targetUrl;
+                    }
+                });
+            });
+
+            /* --- 3. SCROLL REVEAL --- */
+            const observer = new IntersectionObserver((entries, obs) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('reveal-visible');
+                        obs.unobserve(entry.target);
+                    }
+                });
+            }, { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
+
+            document.querySelectorAll('.reveal-hidden').forEach(el => observer.observe(el));
+
+            /* --- 4. MOBILE MENU --- */
+            const closeMobileMenu = () => {
+                mobileMenu.classList.add('hidden');
+                menuButton.setAttribute('aria-expanded', 'false');
+            };
+
+            menuButton.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const isHidden = mobileMenu.classList.toggle('hidden');
+                menuButton.setAttribute('aria-expanded', String(!isHidden));
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!menuButton.contains(e.target) && !mobileMenu.contains(e.target)) closeMobileMenu();
+            });
+
+            /* --- 5. ACCORDION CATEGORY --- */
+            document.querySelectorAll('.accordion-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.category-icon');
+                    const isExpanded = content.classList.toggle('expanded');
+                    icon.classList.toggle('expanded-icon', isExpanded);
+                    this.setAttribute('aria-expanded', String(isExpanded));
+                });
+            });
+
+            /* --- 6. MENU DETAIL MODAL POPUP (INFO & ADD-ONS LIST) --- */
+            const modal = document.getElementById('menu-detail-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const modalTitle = document.getElementById('modal-title');
+            const modalPrice = document.getElementById('modal-price');
+            const modalDesc = document.getElementById('modal-desc');
+            const modalImg = document.getElementById('modal-img');
+            const modalAddonsSection = document.getElementById('modal-addons-section');
+            const modalAddonsList = document.getElementById('modal-addons-list');
+
+            const defaultAddons = [
+                { name: 'Regular Rice', price: 'Gratis' },
+                { name: 'Medium Rice', price: '+ Rp 5.000' },
+                { name: 'Sunny Side Egg', price: '+ Rp 5.000' },
+                { name: 'Extra Sambal', price: '+ Rp 3.000' }
+            ];
+
+            const openMenuDetail = (triggerEl) => {
+                const name = triggerEl.dataset.name;
+                const price = triggerEl.dataset.price;
+                const desc = triggerEl.dataset.desc;
+                const imgSrc = triggerEl.dataset.img;
+
+                let addons = defaultAddons;
+                if (triggerEl.dataset.addons) {
+                    try {
+                        addons = JSON.parse(triggerEl.dataset.addons);
+                    } catch (err) {
+                        addons = defaultAddons;
+                    }
+                }
+
+                modalTitle.textContent = name;
+                modalPrice.textContent = price;
+                modalDesc.textContent = desc || 'Hidangan spesial dari koki kami, dimasak dengan bahan pilihan dan bumbu otentik untuk memberikan pengalaman rasa terbaik.';
+                modalImg.src = imgSrc;
+                modalImg.alt = name;
+
+                if (addons && addons.length > 0) {
+                    modalAddonsSection.classList.remove('hidden');
+                    modalAddonsList.innerHTML = addons.map(addon => {
+                        const isFree = addon.price.toLowerCase() === 'gratis';
+                        const priceClass = isFree
+                            ? 'text-zinc-500 dark:text-zinc-400 text-xs font-medium'
+                            : 'text-wood dark:text-[#a67b4f] font-semibold text-xs';
+                        return `
+                            <div class="theme-transition flex items-center justify-between gap-3 p-3 bg-white dark:bg-[#1c1917] border border-zinc-200 dark:border-zinc-700 rounded-xl">
+                                <span class="text-sm font-medium text-dark dark:text-zinc-200">${addon.name}</span>
+                                <span class="${priceClass} whitespace-nowrap">${addon.price}</span>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    modalAddonsSection.classList.add('hidden');
+                }
+
+                modal.classList.remove('modal-hidden');
+                modal.classList.add('modal-visible');
+                document.body.style.overflow = 'hidden';
+            };
+
+            document.querySelectorAll('.menu-item-trigger').forEach(card => {
+                card.addEventListener('click', () => openMenuDetail(card));
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        openMenuDetail(card);
+                    }
+                });
+            });
+
+            const closeModal = () => {
+                modal.classList.remove('modal-visible');
+                modal.classList.add('modal-hidden');
+                document.body.style.overflow = '';
+            };
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeMobileMenu();
+                    closeModal();
+                }
+            });
+
+            /* --- 7. AUTO-OPEN DETAIL MODAL FROM URL PARAMETER (?menu=...) --- */
+            const urlParams = new URLSearchParams(window.location.search);
+            const targetMenuParam = urlParams.get('menu');
+
+            if (targetMenuParam) {
+                const normalizedTarget = targetMenuParam.trim().toLowerCase();
+                const allMenuTriggers = Array.from(document.querySelectorAll('.menu-item-trigger'));
+                const matchedCard = allMenuTriggers.find(card => 
+                    (card.dataset.name || '').trim().toLowerCase() === normalizedTarget
+                );
+
+                if (matchedCard) {
+                    // Jika menu ada di dalam kategori accordion yang tertutup, buka dulu accordion-nya
+                    const parentAccordion = matchedCard.closest('.category-content');
+                    if (parentAccordion && !parentAccordion.classList.contains('expanded')) {
+                        parentAccordion.classList.add('expanded');
+                        const prevBtn = parentAccordion.previousElementSibling;
+                        if (prevBtn) {
+                            prevBtn.setAttribute('aria-expanded', 'true');
+                            const icon = prevBtn.querySelector('.category-icon');
+                            if (icon) icon.classList.add('expanded-icon');
+                        }
+                    }
+
+                    // Buka popup modal sedikit setelah overlay transisi halaman mulai memudar
+                    setTimeout(() => {
+                        openMenuDetail(matchedCard);
+                        // Bersihkan query ?menu=... di URL agar tidak muncul ulang saat halaman di-refresh
+                        const cleanUrl = window.location.pathname + window.location.hash;
+                        window.history.replaceState({}, document.title, cleanUrl);
+                    }, 180);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
